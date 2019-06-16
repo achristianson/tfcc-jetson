@@ -2,11 +2,15 @@
 
 set -e
 
-bazel_version="0.26.1"
+bazel_version="0.21.0"
 
 # Validate environment
 if ! which cmake; then
   sudo apt-get -y install cmake
+fi
+
+if ! which curl; then
+  sudo apt-get -y install curl
 fi
 
 if ! which javac; then
@@ -30,8 +34,19 @@ if ! which bazel; then
     env EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk" bash ./compile.sh
     sudo cp output/bazel /usr/local/bin/
   fi
+
+  cd ..
 fi
 
-cd ..
-
 # Build tensorflow_cc
+cd tensorflow_cc/tensorflow_cc
+
+if [[ ! -d build ]]; then
+  mkdir build
+fi
+
+cd build
+cmake -DTENSORFLOW_STATIC=OFF -DTENSORFLOW_SHARED=ON ..
+nice make
+cd .. # build
+cd .. # tensorflow_cc
