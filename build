@@ -40,16 +40,18 @@ if ! which bazel; then
 fi
 
 # Install NCCL
-if [[ ! -d nccl ]]; then
-  git clone https://github.com/NVIDIA/nccl.git
-fi
+if [[ ! -f "/usr/local/include/nccl.h" ]]; then
+  if [[ ! -d nccl ]]; then
+    git clone https://github.com/NVIDIA/nccl.git
+  fi
 
-cd "nccl"
-git fetch --all
-git checkout 6d8b242
-make
-make install
-cd .. # nccl
+  cd "nccl"
+  git fetch --all
+  git checkout 6d8b242
+  make -j
+  sudo make install
+  cd .. # nccl
+fi
 
 # Install tensorflow_cc
 cd tensorflow_cc/tensorflow_cc
