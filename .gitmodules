@@ -1,3 +1,6 @@
 [submodule "nifi-minifi-cpp-experimental"]
 	path = nifi-minifi-cpp-experimental
 	url = https://github.com/achristianson/nifi-minifi-cpp-experimental.git
+[submodule "tensorflow_cc"]
+	path = tensorflow_cc
+	url = https://github.com/FloopCZ/tensorflow_cc.git
