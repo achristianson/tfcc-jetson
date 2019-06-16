@@ -3,6 +3,7 @@
 set -e
 
 bazel_version="0.21.0"
+nccl_version="1.3.4-1"
 
 # Validate environment
 if ! which cmake; then
@@ -38,7 +39,19 @@ if ! which bazel; then
   cd ..
 fi
 
-# Build tensorflow_cc
+# Install NCCL
+if [[ ! -d nccl ]]; then
+  git clone https://github.com/NVIDIA/nccl.git
+fi
+
+cd "nccl"
+git fetch --all
+git checkout 6d8b242
+make
+make install
+cd .. # nccl
+
+# Install tensorflow_cc
 cd tensorflow_cc/tensorflow_cc
 
 if [[ ! -d build ]]; then
