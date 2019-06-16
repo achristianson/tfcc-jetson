@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e
+
+bazel_version="0.26.1"
+
+# Validate environment
+if ! which cmake; then
+  sudo apt-get -y install cmake
+fi
+
+if ! which javac; then
+  sudo apt-get -y install openjdk-8-jdk-headless
+fi
+
+#if ! which javac; then
+#  sudo apt-get -y install openjdk-11-jdk-headless
+#fi
+
+# Install bazel
+if ! which bazel; then
+  if [[ ! -d "bazel-${bazel_version}-dist" ]]; then
+    wget "https://github.com/bazelbuild/bazel/releases/download/${bazel_version}/bazel-${bazel_version}-dist.zip"
+    unzip "bazel-${bazel_version}-dist.zip" -d bazel-${bazel_version}-dist
+  fi
+
+  cd "bazel-${bazel_version}-dist"
+
+  if [[ ! -f "output/bazel" ]]; then
+    env EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk" bash ./compile.sh
+    sudo cp output/bazel /usr/local/bin/
+  fi
+fi
+
+cd ..
+
+# Build tensorflow_cc
