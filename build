@@ -3,7 +3,6 @@
 set -e
 
 bazel_version="0.21.0"
-nccl_version="1.3.4-1"
 
 # Validate environment
 if ! which cmake; then
@@ -40,7 +39,7 @@ if ! which bazel; then
 fi
 
 # Install NCCL
-if [[ ! -f "/usr/local/include/nccl.h" ]]; then
+if [[ ! -d "/opt/nccl" ]]; then
   if [[ ! -d nccl ]]; then
     git clone https://github.com/NVIDIA/nccl.git
   fi
@@ -48,8 +47,17 @@ if [[ ! -f "/usr/local/include/nccl.h" ]]; then
   cd "nccl"
   git fetch --all
   git checkout 6d8b242
-  make -j
-  sudo make install
+  make -j src.build
+  make pkg.txz.build
+
+  nccl_pkg_txz="$( readlink -f build/pkg/txz/nccl_*.txz )"
+  nccl_dir="$( echo $( basename "${nccl_pkg_txz}" ) | sed -e 's/.txz$//' )"
+  sudo tar -xvf "${nccl_pkg_txz}" -C /opt
+  sudo ln -sf "${nccl_dir}" "/opt/nccl"
+
+  echo "/opt/${nccl_dir}"
+  ls "/opt/${nccl_dir}"
+
   cd .. # nccl
 fi
 
@@ -61,6 +69,8 @@ if [[ ! -d build ]]; then
 fi
 
 cd build
+export NCCL_INSTALL_PATH="/opt/nccl"
+echo "Using NCCL_INSTALL_PATH: ${NCCL_INSTALL_PATH}"
 cmake -DTENSORFLOW_STATIC=OFF -DTENSORFLOW_SHARED=ON ..
 nice make
 cd .. # build
