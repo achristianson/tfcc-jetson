@@ -21,7 +21,16 @@ Jetson Nano (4GB RAM), it is recommended to have **at least** 8GB of swap
 enabled on the system. Swap should be on a different device than the root
 filesystem, otherwise compilation will be even slower.
 
-To build, run:
+### Enabling swap on a USB flash drive
+
+As `root`:
+
+```sh
+mkswap /dev/<YOUR DEVICE>
+swapon /dev/<YOUR DEVICE>
+```
+
+### To build, run:
 
 ```sh
 git clone --recurse-submodules https://github.com/achristianson/tfcc-jetson.git
