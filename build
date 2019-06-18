@@ -24,10 +24,6 @@ if [[ "$( free | awk '$1 == "Mem:" { print $7 }' )" -lt 8000000 ]]; then
   fi
 fi
 
-#if ! which javac; then
-#  sudo apt-get -y install openjdk-11-jdk-headless
-#fi
-
 # Install bazel
 if ! which bazel; then
   if [[ ! -d "bazel-${bazel_version}-dist" ]]; then
@@ -93,4 +89,3 @@ cd .. # build
 cd .. # tensorflow_cc
 
 fi
-
