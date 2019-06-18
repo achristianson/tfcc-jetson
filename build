@@ -3,6 +3,7 @@
 set -e
 
 bazel_version="0.24.1"
+tensorflow_cc_version="v2.0.0-beta1" 
 
 # Validate environment
 if ! which cmake; then
@@ -74,7 +75,7 @@ if [[ ! -d build ]]; then
 fi
 
 # Patch to use newer TF tag which support aarch64
-sed -i -e  's/v1.13.1/v2.0.0-beta1/g' CMakeLists.txt
+sed -i -e  "s/v1.13.1/${tensorflow_cc_version}/g" CMakeLists.txt
 
 cd build
 export NCCL_INSTALL_PATH="/opt/nccl"

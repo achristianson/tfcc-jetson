@@ -1,5 +1,5 @@
-# minifi-jetson
-Build Apache NiFi - MiNiFi - C++ for NVIDIA® Jetson™ systems
+# tfcc-jetson
+Build `tensorflow_cc` for NVIDIA® Jetson™ systems
 
 ## Requirements
 
@@ -21,10 +21,12 @@ Jetson Nano (4GB RAM), it is recommended to have **at least** 8GB of swap
 enabled on the system. Swap should be on a different device than the root
 filesystem, otherwise compilation will be even slower.
 
-Run:
+To build, run:
 
 ```sh
-./build # This will build AND install
+git clone --recurse-submodules https://github.com/achristianson/tfcc-jetson.git
+cd minifi-jetson
+./build # This will build AND install tensorflow_cc
 ```
 
 Expect `tensorflow_cc` compilation to take a day or so.
