@@ -9,7 +9,7 @@ build script:
 
 - `cmake`
 - `curl`
-- `tensorflow\_cc`
+- `tensorflow_cc`
   - `bazel`
     - `openjdk-8-jdk-headless`
   - `NCCL`
