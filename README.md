@@ -21,7 +21,7 @@ Jetson Nano (4GB RAM), it is recommended to have **at least** 8GB of swap
 enabled on the system. Swap should be on a different device than the root
 filesystem, otherwise compilation will be even slower.
 
-### Enabling swap on a USB flash drive
+### Enabling swap on a USB flash drive:
 
 As `root`:
 
@@ -34,7 +34,7 @@ swapon /dev/<YOUR DEVICE>
 
 ```sh
 git clone --recurse-submodules https://github.com/achristianson/tfcc-jetson.git
-cd minifi-jetson
+cd tfcc-jetson
 ./build # This will build AND install tensorflow_cc
 ```
 
