@@ -69,6 +69,9 @@ if [[ ! -f "/usr/local/lib/tensorflow_cc/libtensorflow_cc.so" ]]; then
   nice make
   sudo make install
 
+  sudo mv -f /usr/local/lib/tensorflow_cc/libtensorflow_cc.so{,.2}
+  sudo ln -sf /usr/local/lib/tensorflow_cc/libtensorflow_cc.so{.2,}
+
   cd .. # build
   cd .. # tensorflow_cc
   cd .. # tensorflow_cc
