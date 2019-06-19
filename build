@@ -51,7 +51,10 @@ if [[ ! -f "/usr/local/lib/tensorflow_cc/libtensorflow_cc.so" ]]; then
   sed -i -e  "s/v1.13.1/${tensorflow_cc_version}/g" CMakeLists.txt
 
   # Patch to disable NCCL
-  sed -i -e 's/--config=monolithic \\/--config=monolithic --config=nonccl --config=noaws --config=nogcp --config=nohdfs --config=noignite --config=nokafka \\/' cmake/build_tensorflow.sh.in
+  sed -i -e 's/--config=monolithic \\/--config=monolithic --config=nonccl --config=noaws --config=nogcp --config=nohdfs --config=noignite --config=nokafka \\/' \
+      -e '/^export NCCL_INSTALL_PATH/d' \
+      -e '/^export TF_NCCL_VERSION/d' \
+      cmake/build_tensorflow.sh.in
 
   if [[ ! -d build ]]; then
     mkdir build
