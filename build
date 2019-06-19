@@ -42,51 +42,31 @@ if ! which bazel; then
   cd ..
 fi
 
-# Install NCCL
-if [[ ! -e "/opt/nccl" ]]; then
-  if [[ ! -d nccl ]]; then
-    git clone https://github.com/NVIDIA/nccl.git
-  fi
-
-  cd "nccl"
-  git fetch --all --tags
-  git checkout "v2.3.7-1"
-  make -j src.build
-  make pkg.txz.build
-
-  nccl_pkg_txz="$( readlink -f build/pkg/txz/nccl_*.txz )"
-  nccl_dir="$( echo $( basename "${nccl_pkg_txz}" ) | sed -e 's/.txz$//' )"
-  sudo tar -xvf "${nccl_pkg_txz}" -C /opt
-  sudo ln -Tsf "${nccl_dir}" "/opt/nccl"
-
-  echo "/opt/${nccl_dir}"
-  ls "/opt/${nccl_dir}"
-
-  cd .. # nccl
-fi
-
 # Install tensorflow_cc
 if [[ ! -f "/usr/local/lib/tensorflow_cc/libtensorflow_cc.so" ]]; then
 
-cd tensorflow_cc/tensorflow_cc
+  cd tensorflow_cc/tensorflow_cc
 
-if [[ ! -d build ]]; then
-  mkdir build
-fi
+  # Patch to use newer TF tag which support aarch64
+  sed -i -e  "s/v1.13.1/${tensorflow_cc_version}/g" CMakeLists.txt
 
-# Patch to use newer TF tag which support aarch64
-sed -i -e  "s/v1.13.1/${tensorflow_cc_version}/g" CMakeLists.txt
+  # Patch to disable NCCL
+  sed -i -e 's/--config=monolithic \\/--config=monolithic --config=nonccl \\/' cmake/build_tensorflow.sh.in
 
-cd build
-export NCCL_INSTALL_PATH="/opt/nccl"
-export CC_OPT_FLAGS="-march=native"
-echo "Using NCCL_INSTALL_PATH: ${NCCL_INSTALL_PATH}"
-cmake -DTENSORFLOW_STATIC=OFF -DTENSORFLOW_SHARED=ON ..
+  if [[ ! -d build ]]; then
+    mkdir build
+  fi
 
-nice make
-sudo make install
+  cd build
 
-cd .. # build
-cd .. # tensorflow_cc
+  export CC_OPT_FLAGS="-march=native"
+  cmake -DTENSORFLOW_STATIC=OFF -DTENSORFLOW_SHARED=ON ..
+
+  nice make
+  sudo make install
+
+  cd .. # build
+  cd .. # tensorflow_cc
+  cd .. # tensorflow_cc
 
 fi
