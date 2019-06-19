@@ -60,6 +60,7 @@ if [[ ! -f "/usr/local/lib/tensorflow_cc/libtensorflow_cc.so" ]]; then
   cd build
 
   export CC_OPT_FLAGS="-march=native"
+  export TF_ENABLE_XLA=0
   cmake -DTENSORFLOW_STATIC=OFF -DTENSORFLOW_SHARED=ON ..
 
   nice make
