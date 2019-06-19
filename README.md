@@ -12,7 +12,6 @@ build script:
 - `tensorflow_cc`
   - `bazel`
     - `openjdk-8-jdk-headless`
-  - `NCCL`
 
 ## Building
 
